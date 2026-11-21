@@ -1,0 +1,58 @@
+run r_8036a428e907  mode=baseline  model=-  split=all  truth orphans=40  proposals not scored=0
+
+Quality (MAX_COV is the share of orphans with a true owner: the coverage a perfect run would have)
+GROUP                         ORPHANS  NAMED  CORRECT  WRONG  SHOULD_DECLINE  MISSED  MISSING  PRECISION  COVERAGE  MAX_COV  CORRECT_DECLINES
+overall                       40       27     27       0      0               0       0        1.000      0.675     0.675    13/13 = 1.000
+clear_owner                   10       10     10       0      0               0       0        1.000      1.000     1.000    -
+cross_team_decoy              5        5      5        0      0               0       0        1.000      1.000     1.000    -
+no_signals                    5        0      0        0      0               0       0        n/a        0.000     0.000    5/5 = 1.000
+service_or_inactive_top_user  7        5      5        0      0               0       0        1.000      0.714     0.714    2/2 = 1.000
+text_only_evidence            7        7      7        0      0               0       0        1.000      1.000     1.000    -
+tied_evidence                 6        0      0        0      0               0       0        n/a        0.000     0.000    6/6 = 1.000
+
+Cost and latency
+GROUP                         PROPOSALS  MODEL_CALLS  NO_MODEL  COST_USD  COST/PROPOSAL  P50_MS  P95_MS
+overall                       40         0            1.000     0.000000  0.000000       0.1     0.2
+clear_owner                   10         0            1.000     0.000000  0.000000       0.1     0.1
+cross_team_decoy              5          0            1.000     0.000000  0.000000       0.1     0.1
+no_signals                    5          0            1.000     0.000000  0.000000       0.0     0.1
+service_or_inactive_top_user  7          0            1.000     0.000000  0.000000       0.2     0.3
+text_only_evidence            7          0            1.000     0.000000  0.000000       0.1     0.2
+tied_evidence                 6          0            1.000     0.000000  0.000000       0.1     0.1
+
+Thresholds (approve only owner proposals with confidence >= x)
+X     APPROVED  CORRECT  PRECISION  COVERAGE
+0.00  27        27       1.000      0.675
+0.05  27        27       1.000      0.675
+0.10  27        27       1.000      0.675
+0.15  27        27       1.000      0.675
+0.20  27        27       1.000      0.675
+0.25  27        27       1.000      0.675
+0.30  27        27       1.000      0.675
+0.35  27        27       1.000      0.675
+0.40  27        27       1.000      0.675
+0.45  27        27       1.000      0.675
+0.50  27        27       1.000      0.675
+0.55  27        27       1.000      0.675
+0.60  27        27       1.000      0.675
+0.65  27        27       1.000      0.675
+0.70  27        27       1.000      0.675
+0.75  27        27       1.000      0.675
+0.80  27        27       1.000      0.675
+0.85  27        27       1.000      0.675
+0.90  27        27       1.000      0.675
+0.95  27        27       1.000      0.675
+
+Reliability (does confidence match how often the owner is right?)
+CONFIDENCE  PROPOSALS  CORRECT  ACCURACY  MEAN_CONF
+0.9-1.0     27         27       1.000     0.987
+
+Confidence groups (RECORDED is what propose used; MEASURED is what this run supports)
+GROUP                   ANSWERS  RIGHT  ACCURACY  RECORDED  MEASURED
+proposal_named_in_text  7        7      1.000     0.98      0.89
+proposal_activity       20       20     1.000     0.99      0.95
+decline_nobody          7        7      1.000     0.98      0.89
+decline_close           6        6      1.000     0.97      0.88
+
+Wrong proposals (0)
+(none)

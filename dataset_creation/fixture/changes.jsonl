@@ -1,0 +1,31 @@
+{"record_type": "change", "change_id": "c_001", "op": "set_owner", "asset_id": "a_2949", "owner": "u_120", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_002", "op": "set_owner", "asset_id": "a_2342", "owner": "u_172", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_003", "op": "set_owner", "asset_id": "a_1893", "owner": "u_058", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_004", "op": "set_owner", "asset_id": "a_1793", "owner": "u_101", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_005", "op": "set_owner", "asset_id": "a_2519", "owner": "u_061", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_006", "op": "set_owner", "asset_id": "a_2664", "owner": "u_073", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_007", "op": "set_owner", "asset_id": "a_2305", "owner": "u_197", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_008", "op": "set_owner", "asset_id": "a_2115", "owner": "u_134", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_009", "op": "set_owner", "asset_id": "a_2810", "owner": "u_134", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_010", "op": "set_owner", "asset_id": "a_2710", "owner": "u_045", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_011", "op": "set_owner", "asset_id": "a_1072", "owner": "u_055", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_012", "op": "set_owner", "asset_id": "a_1722", "owner": "u_100", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_013", "op": "set_owner", "asset_id": "a_0683", "owner": "u_054", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_014", "op": "set_owner", "asset_id": "a_2342", "owner": "u_172", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_015", "op": "set_owner", "asset_id": "a_0324", "owner": "u_054", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_016", "op": "delete_asset", "asset_id": "a_2166", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_017", "op": "delete_asset", "asset_id": "a_1253", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_018", "op": "delete_asset", "asset_id": "a_1026", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_019", "op": "delete_asset", "asset_id": "a_2336", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_020", "op": "delete_asset", "asset_id": "a_1532", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_021", "op": "delete_asset", "asset_id": "a_0683", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_022", "op": "delete_asset", "asset_id": "a_2215", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_023", "op": "deactivate_user", "user_id": "u_106", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_024", "op": "deactivate_user", "user_id": "u_161", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_025", "op": "deactivate_user", "user_id": "u_005", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_026", "op": "deactivate_user", "user_id": "u_177", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_027", "op": "deactivate_user", "user_id": "u_153", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_028", "op": "deactivate_user", "user_id": "u_175", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_029", "op": "deactivate_user", "user_id": "u_120", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_030", "op": "deactivate_user", "user_id": "u_162", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_031", "op": "set_owner", "asset_id": "a_2076", "owner": "u_106", "actor": "human:steward"}

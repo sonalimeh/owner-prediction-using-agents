@@ -1,0 +1,45 @@
+# LLMs that `propose` (without --baseline) can use. Pick one with `propose --model <name>`,
+# or set OWNER_AGENT_MODEL. Point OWNER_AGENT_MODELS at another file to use your own registry.
+#
+# API keys never go in this file: each model names the environment variable that holds its key.
+# Put the keys in your shell environment or in a .env file in the directory you run from.
+#
+# Prices are USD per million tokens and are only used to report cost; check them against the
+# provider's current price list when you change models.
+
+default = "claude-haiku-4.5"
+
+[models."claude-haiku-4.5"]
+provider = "anthropic"
+model = "claude-haiku-4-5"
+api_key_env = "ANTHROPIC_API_KEY"
+input_usd_per_mtok = 1.00
+output_usd_per_mtok = 5.00
+temperature = 0
+
+[models."claude-sonnet-4.5"]
+provider = "anthropic"
+model = "claude-sonnet-4-5"
+api_key_env = "ANTHROPIC_API_KEY"
+input_usd_per_mtok = 3.00
+output_usd_per_mtok = 15.00
+temperature = 0
+
+[models."gpt-4.1-mini"]
+provider = "openai"
+model = "gpt-4.1-mini"
+api_key_env = "OPENAI_API_KEY"
+input_usd_per_mtok = 0.40
+output_usd_per_mtok = 1.60
+temperature = 0
+
+# Any OpenAI-compatible endpoint (Ollama, vLLM, a company gateway) works with provider "openai":
+#
+# [models."local-llama"]
+# provider = "openai"
+# base_url = "http://localhost:11434/v1"
+# model = "llama3.1:8b"
+# api_key_env = "LOCAL_LLM_API_KEY"
+# input_usd_per_mtok = 0
+# output_usd_per_mtok = 0
+# temperature = 0

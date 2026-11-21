@@ -1,0 +1,7 @@
+{"record_type": "change", "change_id": "c_001", "op": "set_owner", "asset_id": "a_0187", "owner": "u_008", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_002", "op": "set_owner", "asset_id": "a_0105", "owner": "u_016", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_003", "op": "set_owner", "asset_id": "a_0056", "owner": "u_022", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_004", "op": "delete_asset", "asset_id": "a_0179", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_005", "op": "delete_asset", "asset_id": "a_0228", "actor": "human:steward"}
+{"record_type": "change", "change_id": "c_006", "op": "deactivate_user", "user_id": "u_020", "actor": "human:it-admin"}
+{"record_type": "change", "change_id": "c_007", "op": "deactivate_user", "user_id": "u_003", "actor": "human:it-admin"}

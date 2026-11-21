@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "split": "calibration",
+  "orphans": 245,
+  "threshold": 0.95,
+  "groups": {
+    "proposal_unread_text": {
+      "right": 3,
+      "total": 18,
+      "confidence": 0.2
+    },
+    "proposal_named_in_text": {
+      "right": 45,
+      "total": 45,
+      "confidence": 0.98
+    },
+    "proposal_thin": {
+      "right": 7,
+      "total": 7,
+      "confidence": 0.89
+    },
+    "proposal_activity": {
+      "right": 73,
+      "total": 73,
+      "confidence": 0.99
+    },
+    "decline_unread_text": {
+      "right": 3,
+      "total": 9,
+      "confidence": 0.36
+    },
+    "decline_nobody": {
+      "right": 57,
+      "total": 57,
+      "confidence": 0.98
+    },
+    "decline_close": {
+      "right": 36,
+      "total": 36,
+      "confidence": 0.97
+    }
+  },
+  "precision_coverage": [
+    {
+      "threshold": 0.99,
+      "approved": 73,
+      "right": 73,
+      "precision": 1.0,
+      "coverage": 0.298
+    },
+    {
+      "threshold": 0.98,
+      "approved": 118,
+      "right": 118,
+      "precision": 1.0,
+      "coverage": 0.482
+    },
+    {
+      "threshold": 0.89,
+      "approved": 125,
+      "right": 125,
+      "precision": 1.0,
+      "coverage": 0.51
+    },
+    {
+      "threshold": 0.2,
+      "approved": 143,
+      "right": 128,
+      "precision": 0.895,
+      "coverage": 0.584
+    }
+  ]
+}

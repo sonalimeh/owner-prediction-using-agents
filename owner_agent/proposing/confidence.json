@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "split": "calibration",
+  "threshold": 0.95,
+  "groups": {
+    "proposal_unread_text": {
+      "right": 3,
+      "total": 18,
+      "confidence": 0.2
+    },
+    "proposal_model_text": {
+      "right": 18,
+      "total": 18,
+      "confidence": 0.95,
+      "run_id": "r_f95809a80925"
+    },
+    "proposal_named_in_text": {
+      "right": 45,
+      "total": 45,
+      "confidence": 0.98,
+      "run_id": "r_f95809a80925"
+    },
+    "proposal_thin": {
+      "right": 7,
+      "total": 7,
+      "confidence": 0.89,
+      "run_id": "r_f95809a80925"
+    },
+    "proposal_activity": {
+      "right": 73,
+      "total": 73,
+      "confidence": 0.99,
+      "run_id": "r_f95809a80925"
+    },
+    "decline_unread_text": {
+      "right": 3,
+      "total": 9,
+      "confidence": 0.36
+    },
+    "decline_model_text": {
+      "right": 9,
+      "total": 9,
+      "confidence": 0.91,
+      "run_id": "r_f95809a80925"
+    },
+    "decline_nobody": {
+      "right": 57,
+      "total": 57,
+      "confidence": 0.98,
+      "run_id": "r_f95809a80925"
+    },
+    "decline_close": {
+      "right": 36,
+      "total": 36,
+      "confidence": 0.97,
+      "run_id": "r_f95809a80925"
+    }
+  }
+}

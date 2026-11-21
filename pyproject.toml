@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "owner-agent"
+version = "0.1.0"
+description = "Proposes owners for orphaned catalog assets, with human approval"
+requires-python = ">=3.11"
+
+[project.scripts]
+load = "owner_agent.cli:load_command"
+propose = "owner_agent.cli:propose_command"
+proposals = "owner_agent.cli:proposals_command"
+approve = "owner_agent.cli:approve_command"
+approve-batch = "owner_agent.cli:approve_batch_command"
+reject = "owner_agent.cli:reject_command"
+changes = "owner_agent.cli:changes_command"
+apply = "owner_agent.cli:apply_command"
+eval = "owner_agent.cli:eval_command"
+dump = "owner_agent.cli:dump_command"
+audit = "owner_agent.cli:audit_command"
+
+[tool.setuptools.packages.find]
+include = ["owner_agent*"]
+
+[tool.setuptools.package-data]
+"owner_agent.proposing" = ["confidence.json"]
+"owner_agent.proposing.llms" = ["models.toml"]

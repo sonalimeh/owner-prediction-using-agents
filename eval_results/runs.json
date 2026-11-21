@@ -1,0 +1,80 @@
+{
+  "fixture": {
+    "db": "eval.db",
+    "truth": "dataset_creation/fixture/truth.jsonl",
+    "baseline": "r_2498356451a7",
+    "model": [
+      "r_f7503a4d606f",
+      "r_95d662024341",
+      "r_a72ddb752fe6"
+    ],
+    "runs": {
+      "r_2498356451a7": {
+        "run_id": "r_2498356451a7",
+        "mode": "baseline",
+        "model": null,
+        "prompt_version": "scorer-v1",
+        "started_at": "2026-11-21T12:17:43.305020Z",
+        "proposals": 490,
+        "cost_usd": 0.0
+      },
+      "r_f7503a4d606f": {
+        "run_id": "r_f7503a4d606f",
+        "mode": "model",
+        "model": "claude-haiku-4.5",
+        "prompt_version": "scorer-v1+text-facts-v2",
+        "started_at": "2026-11-21T12:17:43.751584Z",
+        "proposals": 490,
+        "cost_usd": 0.050279
+      },
+      "r_95d662024341": {
+        "run_id": "r_95d662024341",
+        "mode": "model",
+        "model": "claude-haiku-4.5",
+        "prompt_version": "scorer-v1+text-facts-v2",
+        "started_at": "2026-11-21T12:17:53.516286Z",
+        "proposals": 490,
+        "cost_usd": 0.050304
+      },
+      "r_a72ddb752fe6": {
+        "run_id": "r_a72ddb752fe6",
+        "mode": "model",
+        "model": "claude-haiku-4.5",
+        "prompt_version": "scorer-v1+text-facts-v2",
+        "started_at": "2026-11-21T12:18:02.898473Z",
+        "proposals": 490,
+        "cost_usd": 0.050049
+      }
+    }
+  },
+  "reference": {
+    "db": "ref_eval.db",
+    "truth": "reference/truth.jsonl",
+    "baseline": "r_8036a428e907",
+    "model": [
+      "r_0c1dddcea683"
+    ],
+    "runs": {
+      "r_8036a428e907": {
+        "run_id": "r_8036a428e907",
+        "mode": "baseline",
+        "model": null,
+        "prompt_version": "scorer-v1",
+        "started_at": "2026-11-21T12:18:12.595680Z",
+        "proposals": 40,
+        "cost_usd": 0.0
+      },
+      "r_0c1dddcea683": {
+        "run_id": "r_0c1dddcea683",
+        "mode": "model",
+        "model": "claude-haiku-4.5",
+        "prompt_version": "scorer-v1+text-facts-v2",
+        "started_at": "2026-11-21T12:18:12.691520Z",
+        "proposals": 40,
+        "cost_usd": 0.0
+      }
+    }
+  },
+  "threshold": 0.95,
+  "note": "reports in this folder were produced from these runs with: python -m owner_agent eval <truth> --run <id> [--split ...] [--compare ...]"
+}

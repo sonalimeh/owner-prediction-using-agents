@@ -1,0 +1,93 @@
+run r_f7503a4d606f  mode=model  model=claude-haiku-4.5  split=held_out  truth orphans=245  proposals not scored=245
+
+Quality (MAX_COV is the share of orphans with a true owner: the coverage a perfect run would have)
+GROUP                         ORPHANS  NAMED  CORRECT  WRONG  SHOULD_DECLINE  MISSED  MISSING  PRECISION  COVERAGE  MAX_COV  CORRECT_DECLINES
+overall                       245      141    141      0      0               2       0        1.000      0.576     0.584    102/102 = 1.000
+clear_owner                   43       41     41       0      0               2       0        1.000      0.954     1.000    -
+conflict                      17       7      7        0      0               0       0        1.000      0.412     0.412    10/10 = 1.000
+cross_team_decoy              19       19     19       0      0               0       0        1.000      1.000     1.000    -
+cross_team_owner              9        9      9        0      0               0       0        1.000      1.000     1.000    -
+disowned                      12       6      6        0      0               0       0        1.000      0.500     0.500    6/6 = 1.000
+handover                      11       9      9        0      0               0       0        1.000      0.818     0.818    2/2 = 1.000
+near_tie                      4        0      0        0      0               0       0        n/a        0.000     0.000    4/4 = 1.000
+no_signals                    17       0      0        0      0               0       0        n/a        0.000     0.000    17/17 = 1.000
+readers_only                  5        0      0        0      0               0       0        n/a        0.000     0.000    5/5 = 1.000
+service_or_inactive_top_user  30       15     15       0      0               0       0        1.000      0.500     0.500    15/15 = 1.000
+text_only_evidence            51       33     33       0      0               0       0        1.000      0.647     0.647    18/18 = 1.000
+tied_evidence                 19       0      0        0      0               0       0        n/a        0.000     0.000    19/19 = 1.000
+two_texts                     8        2      2        0      0               0       0        1.000      0.250     0.250    6/6 = 1.000
+
+Cost and latency
+GROUP                         PROPOSALS  MODEL_CALLS  NO_MODEL  COST_USD  COST/PROPOSAL  P50_MS  P95_MS
+overall                       245        27           0.890     0.025026  0.000102       0.2     1254.0
+clear_owner                   43         3            0.930     0.003106  0.000072       0.2     1174.9
+conflict                      17         6            0.647     0.005554  0.000327       0.2     2634.3
+cross_team_decoy              19         0            1.000     0.000000  0.000000       0.2     0.5
+cross_team_owner              9          0            1.000     0.000000  0.000000       0.2     0.3
+disowned                      12         6            0.500     0.005103  0.000425       0.3     1447.1
+handover                      11         3            0.727     0.003549  0.000323       0.3     1691.3
+near_tie                      4          0            1.000     0.000000  0.000000       0.2     0.3
+no_signals                    17         0            1.000     0.000000  0.000000       0.1     0.3
+readers_only                  5          0            1.000     0.000000  0.000000       0.2     0.2
+service_or_inactive_top_user  30         3            0.900     0.002484  0.000083       0.2     1502.9
+text_only_evidence            51         6            0.882     0.005230  0.000103       0.2     1254.0
+tied_evidence                 19         0            1.000     0.000000  0.000000       0.2     0.4
+two_texts                     8          0            1.000     0.000000  0.000000       0.2     0.2
+
+Thresholds (approve only owner proposals with confidence >= x)
+X     APPROVED  CORRECT  PRECISION  COVERAGE
+0.00  141       141      1.000      0.576
+0.05  141       141      1.000      0.576
+0.10  141       141      1.000      0.576
+0.15  141       141      1.000      0.576
+0.20  141       141      1.000      0.576
+0.25  141       141      1.000      0.576
+0.30  141       141      1.000      0.576
+0.35  141       141      1.000      0.576
+0.40  141       141      1.000      0.576
+0.45  141       141      1.000      0.576
+0.50  141       141      1.000      0.576
+0.55  141       141      1.000      0.576
+0.60  141       141      1.000      0.576
+0.65  141       141      1.000      0.576
+0.70  141       141      1.000      0.576
+0.75  141       141      1.000      0.576
+0.80  141       141      1.000      0.576
+0.85  141       141      1.000      0.576
+0.90  133       133      1.000      0.543
+0.95  133       133      1.000      0.543
+
+Reliability (does confidence match how often the owner is right?)
+CONFIDENCE  PROPOSALS  CORRECT  ACCURACY  MEAN_CONF
+0.8-0.9     8          8        1.000     0.890
+0.9-1.0     133        133      1.000     0.982
+
+Confidence groups (RECORDED is what propose used; MEASURED is what this run supports)
+GROUP                   ANSWERS  RIGHT  ACCURACY  RECORDED  MEASURED
+proposal_model_text     16       16     1.000     0.95      0.94
+proposal_named_in_text  45       45     1.000     0.98      0.98
+proposal_thin           8        8      1.000     0.89      0.90
+proposal_activity       72       72     1.000     0.99      0.99
+decline_model_text      11       9      0.818     0.91      0.77
+decline_nobody          57       57     1.000     0.98      0.98
+decline_close           36       36     1.000     0.97      0.97
+
+Consistency across r_f7503a4d606f, r_95d662024341, r_a72ddb752fe6
+GROUP                         COMPARED  SAME  CONSISTENCY
+overall                       245       245   1.000
+clear_owner                   43        43    1.000
+conflict                      17        17    1.000
+cross_team_decoy              19        19    1.000
+cross_team_owner              9         9     1.000
+disowned                      12        12    1.000
+handover                      11        11    1.000
+near_tie                      4         4     1.000
+no_signals                    17        17    1.000
+readers_only                  5         5     1.000
+service_or_inactive_top_user  30        30    1.000
+text_only_evidence            51        51    1.000
+tied_evidence                 19        19    1.000
+two_texts                     8         8     1.000
+
+Wrong proposals (0)
+(none)

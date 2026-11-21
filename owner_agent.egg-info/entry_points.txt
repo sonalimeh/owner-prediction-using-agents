@@ -1,0 +1,12 @@
+[console_scripts]
+apply = owner_agent.cli:apply_command
+approve = owner_agent.cli:approve_command
+approve-batch = owner_agent.cli:approve_batch_command
+audit = owner_agent.cli:audit_command
+changes = owner_agent.cli:changes_command
+dump = owner_agent.cli:dump_command
+eval = owner_agent.cli:eval_command
+load = owner_agent.cli:load_command
+proposals = owner_agent.cli:proposals_command
+propose = owner_agent.cli:propose_command
+reject = owner_agent.cli:reject_command
