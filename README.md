@@ -1,5 +1,7 @@
 # Owner proposals with approval
 
+Video walkthrough: [Loom](https://www.loom.com/share/74b955a3117c487294ce8562c376d87d)
+
 A command-line agent that proposes an owner for every data asset that has none, waits for a person to approve each proposal, and only then writes it to the catalog. One Python process, one SQLite file.
 
 ```
