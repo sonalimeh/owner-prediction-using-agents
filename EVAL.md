@@ -9,7 +9,7 @@ Every table below is copied from a report in `eval_results/`; the file is named 
 | Fixture | `dataset_creation/fixture/`: 490 labelled orphans, 245 calibration and 245 held_out, 13 cases ([scenarios.md](dataset_creation/scenarios.md)) |
 | Reference set | `reference/`: 40 orphans labelled by the examiners, 6 cases |
 | Baseline | `propose --baseline`: rules only, prompt version `scorer-v1` |
-| Model-assisted | `propose`: the same rules; the model reads only the text the rule patterns cannot. `claude-haiku-4.5`, temperature 0, prompt `scorer-v1+text-facts-v2` |
+| Model-assisted | `propose`: the same rules; the model reads only the text the rule patterns cannot. `claude-haiku-4.5`, temperature 0, prompt `scorer-v1+text-facts-v2`. Every number in sections 2 to 6 is from v2; section 8 describes a fix made afterwards (v3) and why its held_out numbers are not an unseen test |
 | Threshold | 0.95 for `approve-batch`, chosen on the calibration split only (section 4) |
 | Held_out | Looked at once, after the rules, the prompt and the threshold were fixed |
 
@@ -86,7 +86,7 @@ The model is called for an orphan only when its description or a note is neither
 | clear_owner | 3 | **2 right owners became declines** (section 6) | the only loss |
 | the other 7 cases | 0 | nothing | no cost |
 
-The same picture from the other direction: `eval --compare` between the first model run and the baseline run on the scenario database (`catalog.db`, runs `r_051be9c27b17` and `r_3c4c06f67891`, calibration split) shows where the two modes give different answers:
+The same picture from the other direction: `evals --compare` between the first model run and the baseline run on the scenario database (`catalog.db`, runs `r_051be9c27b17` and `r_3c4c06f67891`, calibration split) shows where the two modes give different answers:
 
 | Case | Compared | Same answer | Agreement |
 |---|---|---|---|
@@ -162,10 +162,10 @@ Three model-assisted runs on the same database (`r_f7503a4d606f`, `r_95d66202434
 Five, chosen to cover each cause. For each: was the cause the evidence given to the model, a tool or query, or the model's decision?
 
 **1. a_1822, clear_owner, model-assisted. Declined; truth Laszlo Silva (u_197).**
-Laszlo Silva has 4 edits and 1 incident (11 points). An incident note by another person reads "Paired with Rohan on the backfill." The rules cannot read it, so the model is asked. It reported Yusuf Mbeki as `maintainer` with that quote. Code accepted the fact (the quote is real and names a unique user), the rules then saw a text naming one person while another leads on points, and declined with "the text and the work disagree", confidence 0.91. **Cause: the model's decision.** Pairing on a backfill is not maintaining. The evidence was complete and the tool did what it should: the cross-check turned a wrong owner into a safe decline.
+Laszlo Silva has 4 edits and 1 incident (11 points). A query note by Yusuf Mbeki reads "Paired with Rohan on the backfill." The rules cannot read it, so the model is asked. It reported the note's author, Yusuf Mbeki, as `maintainer` with that quote. Code accepted the fact because a fact about a note's own writer needs no name check (the quote names Rohan, not Yusuf), so it became a self-claim worth 10 points. The rules then saw a text claiming one person while another leads on points, and declined with "the text and the work disagree", confidence 0.91. **Cause: the model's decision.** Pairing on a backfill is not maintaining, and nothing in the note is first person. The evidence was complete. The tool's cross-check held because Laszlo's 11 points outweighed the claim; with a weaker editor the same misread would have proposed Yusuf.
 
 **2. a_1914, clear_owner, model-assisted. Declined; truth Daria Zhou (u_163).**
-The same wording, "Paired with Yuki on the backfill.", read as Chen Yilmaz maintaining the asset; Daria Zhou has 6 edits. **Cause: the model's decision**, the same mistake. This wording is one of the held_out-only texts ([scenarios.md 3.5](dataset_creation/scenarios.md)); the two calibration wordings for harmless notes were read correctly in all 6 cases. A prompt example of a harmless note is the fix, and it would have to be tested on yet another unseen wording.
+The same wording, "Paired with Yuki on the backfill.", written by Chen Yilmaz and read as Chen claiming the asset; Daria Zhou has 6 edits (12 points against the claim's 10). **Cause: the model's decision**, the same mistake, accepted the same way. This wording is one of the held_out-only texts ([scenarios.md 3.5](dataset_creation/scenarios.md)); the two calibration wordings for harmless notes were read correctly in all 6 cases. A prompt example of a harmless note is the fix, and it would have to be tested on yet another unseen wording.
 
 **3. a_0150, handover, baseline. Proposed Keiko Iyer (u_071); truth Rafael Castillo (u_155). Confidence 0.20.**
 Keiko Iyer made 5 edits and then wrote "Passing this one to Rafael Castillo from now on." The rule patterns know "Handed this to X" but not this wording, so the note was flagged unread and Keiko was proposed. **Cause: a tool**: the deterministic text reader covers a fixed list of wordings. The proposal carries 0.20 precisely because unread text is present, so approve-batch would not take it. The model-assisted run reads the note and proposes Rafael Castillo.
@@ -176,7 +176,7 @@ Paloma Novak made 6 edits and wrote "I have moved off this; please stop assignin
 **5. a_0804, conflict, baseline. Proposed Beatriz Zhou (u_127); truth none. Confidence 0.20.**
 Beatriz Zhou made 10 edits; the description says "Speak to Valeria Mbeki, who runs this." Unread, so the editor was proposed. The right answer under our rule is none: the text names one person and the work points to another. **Cause: a tool.** Model-assisted: the description is read, the conflict is seen, declined.
 
-Pattern: the baseline's errors are all one kind (text it cannot read) and all land in the two low-confidence groups, which is what makes the baseline safe to use with approve-batch. The model's errors are its own reading mistakes, and every one of them became a decline rather than a wrong owner, because the model never picks the owner.
+Pattern: the baseline's errors are all one kind (text it cannot read) and all land in the two low-confidence groups, which is what makes the baseline safe to use with approve-batch. The model's errors are its own reading mistakes. Both became declines rather than wrong owners, but not by design alone: the model's facts go through the same points rule as everything else, and in both cases the real editor had more points than the false claim. A fact about a note's own author passed the name check automatically, so a misread note on an asset with little other activity would have proposed the author and, at 0.95, auto-approved it. Section 8 shows that happening and the fix.
 
 ## 7. What these numbers do not show
 
@@ -184,3 +184,19 @@ Pattern: the baseline's errors are all one kind (text it cannot read) and all la
 - The reference labels were read before the rules were final.
 - The fixture's mix of text that matters (42 orphans) against harmless text (12) is our choice. The examiners' data has no unknown wordings at all.
 - Precision of 1.000 on held_out comes from data built so that the only hard part is text. Real catalogs will have other kinds of mistakes, and the 0.98 and 0.99 confidences are optimistic there.
+
+## 8. A fix made after looking at held_out
+
+**The flaw.** In `owner_agent/proposing/text_facts.py` a model fact was accepted if the quote was a real substring of the source and either named the user the way the rules accept a name, or was about the note's own author. The second branch asked nothing of the quote. So when the model called the author of "Paired with Rohan on the backfill." the maintainer, the fact went through as a self-claim worth 10 points even though the quote names Rohan and says nothing in the first person. In the held_out run this happened on 2 of the 3 notes with that wording (section 6, cases 1 and 2). Both became declines only because the real maintainer had 11 and 12 points against the claim's 10.
+
+**How bad it could be.** Replaying the same stored misread with the real maintainer at 5 points (one edit and one incident) under the old acceptance rule: the reader is proposed at confidence 0.95 (`proposal_model_text`), which `approve-batch --min-confidence 0.95` approves, and `apply` writes. A model misread could reach the catalog.
+
+**The fix** is one condition, prompt version `text-facts-v3`: a fact about the note's own author still needs no name, but when the role is `maintainer` the quote must contain first-person wording (`I`, `I've`, `I'm`, `me`, `my`, `mine`), which the prompt already tells the model to include for claims about the author. Facts in other roles about the author (`former_maintainer`, `not_owner`) are unchanged, so handovers and disownings in the author's own words still work.
+
+**How it was verified.** By replaying the stored v2 model facts, not by a live model call:
+
+- Across the whole stored run, both splits, exactly two kept facts call a note's author the maintainer: the two above. Neither quote has first-person wording, so v3 drops both and changes nothing else. The calibration split is therefore unchanged by construction, and the confidence table stays as it is.
+- Recomputing those two assets with the fact dropped gives Laszlo Silva (a_1822) and Daria Zhou (a_1914) at confidence 0.95, both matching the truth. Held_out model-assisted precision stays 1.000 and coverage rises from 0.576 to 0.584, the maximum; `decline_model_text` goes from 9 of 11 to 9 of 9.
+- Two unit tests cover the condition (author called maintainer without first-person wording is dropped and the 5-point editor is proposed; an author's `former_maintainer` fact still stands). All 117 tests pass.
+
+**What this does to the held_out claim.** The fix was found by reading the held_out failures, so for v3 the held_out split is no longer unseen data. The numbers reported in sections 2 to 6 are the v2 numbers, measured before the fix, and they stay the reported result. A fresh fixture with a new seed, or the examiners' own fixture, is the honest test of v3. The reference set is unaffected either way: it has no text the rules cannot read, so v2 and v3 make no model calls there.

@@ -13,7 +13,7 @@ For one orphaned asset:
 
 The points decide who. The confidence is looked up afterwards: each decision falls in one group, using
 only what the rules can see, and the group's confidence is how often that group was right on the
-calibration split. Those numbers live in confidence.json, written by eval --calibrate; propose only reads them.
+calibration split. Those numbers live in confidence.json, written by evals --calibrate; propose only reads them.
 """
 
 import collections
@@ -53,7 +53,7 @@ ROUTINE_NOTES = {
     "Ad hoc check for the weekly review.",
 }
 
-# Confidence groups. Each decision falls in exactly one; eval --calibrate measures how often each is right.
+# Confidence groups. Each decision falls in exactly one; evals --calibrate measures how often each is right.
 GROUPS = {
     "proposal_unread_text": "proposes an owner, but the asset has text nobody could read",
     "proposal_model_text": "proposes an owner, on an asset with text only the model could read",

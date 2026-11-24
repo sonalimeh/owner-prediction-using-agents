@@ -42,7 +42,7 @@ Models are declared in `owner_agent/proposing/llms/models.toml` (default `claude
 
 Every command takes `--db <file>`; the default is `$OWNER_AGENT_DB` or `catalog.db` in the current directory.
 
-All commands below are written as `python -m owner_agent <command>`. `pip install -e .` also installs them as bare scripts (`load`, `propose`, `apply`, ...), but `eval` is a shell builtin in bash and zsh, so the bare form of that one silently does the wrong thing. Use the module form.
+`pip install -e .` installs each command as a script on the virtualenv's path: `load`, `propose`, `proposals`, `approve`, `approve-batch`, `reject`, `changes`, `apply`, `evals`, `dump`, `audit`. `python -m owner_agent <command>` does the same without the scripts.
 
 ## The fixture and how it was built
 
@@ -67,36 +67,37 @@ The same seed always gives byte-identical files; `dataset_creation/fixture/SHA25
 On the reference set (swap in `dataset_creation/fixture/` for the large one):
 
 ```bash
-export OWNER_AGENT_DB=catalog.db
+load reference/seed.jsonl
+B=$(propose --baseline)                       # deterministic rules, no model call
+M=$(propose)                                  # model-assisted: the model reads text the rules cannot
 
-python -m owner_agent load reference/seed.jsonl
-RUN=$(python -m owner_agent propose --baseline)       # deterministic rules, no model call
-# RUN=$(python -m owner_agent propose)                # model-assisted: the model reads text the rules cannot
+proposals --run $M                            # table of proposals with confidence and status
+proposals --run $M --json                     # the full records
 
-python -m owner_agent proposals --run $RUN             # table of proposals with confidence and status
-python -m owner_agent proposals --run $RUN --json      # the full records
+approve-batch --run $M --min-confidence 0.95 --actor dana
+approve p_xxxxxxxxxxxx --actor dana
+reject  p_xxxxxxxxxxxx --actor dana --reason "wrong team"
 
-python -m owner_agent approve-batch --run $RUN --min-confidence 0.95 --actor dana
-python -m owner_agent approve p_xxxxxxxxxxxx --actor dana
-python -m owner_agent reject  p_xxxxxxxxxxxx --actor dana --reason "wrong team"
+changes reference/changes.jsonl               # edits people made after propose ran
+apply                                         # JSON report: applied / skipped (with reason) / already_applied
 
-python -m owner_agent changes reference/changes.jsonl  # edits people made after propose ran
-python -m owner_agent apply                            # JSON report: applied / skipped (with reason) / already_applied
+dump  > dump.jsonl
+audit > audit.jsonl
 
-python -m owner_agent dump  > dump.jsonl
-python -m owner_agent audit > audit.jsonl
+evals reference/truth.jsonl --run $B
+evals reference/truth.jsonl --run $M --compare $B
 ```
 
-`propose` prints the run id on stdout and its counts on stderr. Proposals are immutable; decisions are final; `apply` is idempotent and resumable:
+Approve from one run only: both runs propose for the same assets, so `apply` would write whichever was approved first and skip the other as a conflict. `propose` prints the run id on stdout and its counts on stderr. Proposals are immutable; decisions are final; `apply` is idempotent and resumable:
 
 ```bash
-CRASH_AFTER=3 python -m owner_agent apply   # exits with code 75 after 3 committed owner writes
-python -m owner_agent apply                 # resumes; ends in the same state as an uninterrupted run
+CRASH_AFTER=3 apply   # exits with code 75 after 3 committed owner writes
+apply                 # resumes; ends in the same state as an uninterrupted run
 ```
 
-### A real run, with the bare commands
+### A real run
 
-A session on the generated fixture, using the console scripts that `pip install -e .` adds (output trimmed). Note that `apply` writes nothing until a person has approved something, and that `.venv/bin/eval` is the way round the shell builtin if you prefer the bare form:
+A session on the generated fixture (output trimmed). Note that `apply` writes nothing until a person has approved something:
 
 ```
 % load dataset_creation/fixture/seed.jsonl
@@ -111,7 +112,7 @@ r_051be9c27b17
 {"already_applied": 0, "applied": 31, "changes": [{"change_id": "c_001", "op": "set_owner", "outcome": "applied"}, ...], "skipped": 0}
 % apply
 {"already_applied": 0, "applied": 0, "results": [], "skipped": 0}
-% .venv/bin/eval dataset_creation/fixture/truth.jsonl --run r_051be9c27b17 --compare r_3c4c06f67891 --split calibration
+% evals dataset_creation/fixture/truth.jsonl --run r_051be9c27b17 --compare r_3c4c06f67891 --split calibration
 run r_051be9c27b17  mode=model  model=claude-haiku-4.5  split=calibration  truth orphans=245  proposals not scored=245
 note: consistency needs at least 3 runs
 ...
@@ -149,29 +150,29 @@ The reports in `eval_results/` were produced like this (run ids in `eval_results
 
 ```bash
 export OWNER_AGENT_DB=eval.db
-python -m owner_agent load dataset_creation/fixture/seed.jsonl
-B=$(python -m owner_agent propose --baseline)
-M1=$(python -m owner_agent propose); M2=$(python -m owner_agent propose); M3=$(python -m owner_agent propose)
+load dataset_creation/fixture/seed.jsonl
+B=$(propose --baseline)
+M1=$(propose); M2=$(propose); M3=$(propose)
 T=dataset_creation/fixture/truth.jsonl
 
-python -m owner_agent eval $T --run $M1 --split calibration             # threshold table: pick x here only
-python -m owner_agent eval $T --run $B  --split calibration
-python -m owner_agent eval $T --run $B  --split held_out
-python -m owner_agent eval $T --run $M1 --split held_out --compare $M2 $M3   # adds consistency across runs
+evals $T --run $M1 --split calibration             # threshold table: pick x here only
+evals $T --run $B  --split calibration
+evals $T --run $B  --split held_out
+evals $T --run $M1 --split held_out --compare $M2 $M3   # adds consistency across runs
 
 export OWNER_AGENT_DB=ref_eval.db
-python -m owner_agent load reference/seed.jsonl
-RB=$(python -m owner_agent propose --baseline); RM=$(python -m owner_agent propose)
-python -m owner_agent eval reference/truth.jsonl --run $RB
-python -m owner_agent eval reference/truth.jsonl --run $RM
+load reference/seed.jsonl
+RB=$(propose --baseline); RM=$(propose)
+evals reference/truth.jsonl --run $RB
+evals reference/truth.jsonl --run $RM
 ```
 
-Add `--json` for the full result. `eval` never writes to the database; it reads the truth file, which no other command may do.
+Add `--json` for the full result. `evals` never writes to the database; it reads the truth file, which no other command may do.
 
 The confidence that `propose` records is the measured accuracy of each decision group on the calibration split, stored in `owner_agent/proposing/confidence.json`. To re-measure it after changing the rules:
 
 ```bash
-python -m owner_agent eval $T --run $M1 --split calibration --calibrate owner_agent/proposing/confidence.json
+evals $T --run $M1 --split calibration --calibrate owner_agent/proposing/confidence.json
 ```
 
 ## Tests

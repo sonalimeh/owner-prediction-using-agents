@@ -76,5 +76,5 @@
     }
   },
   "threshold": 0.95,
-  "note": "reports in this folder were produced from these runs with: python -m owner_agent eval <truth> --run <id> [--split ...] [--compare ...]"
+  "note": "reports in this folder were produced from these runs with: python -m owner_agent evals <truth> --run <id> [--split ...] [--compare ...]"
 }

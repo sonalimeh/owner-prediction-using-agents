@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# Editors
+.vscode/
+.idea/
+
+# Local SQLite databases created by the CLI
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# CLI output at the repo root (dataset .jsonl files live in subdirectories)
+/audit.jsonl
+/dump.jsonl
+
+# Secrets
+.env

@@ -70,8 +70,8 @@ def apply_approved(ctx):
 )
 def evaluate_run(ctx, truth_path, run_id, compare=None, split=None):
     """Score a run's proposals against a truth file; compare adds consistency across runs."""
-    if ctx.command != "eval":
-        raise ToolError(f"evaluate_run reads truth, and only eval may; refused in {ctx.command}")
+    if ctx.command != "evals":
+        raise ToolError(f"evaluate_run reads truth, and only evals may; refused in {ctx.command}")
     return score.evaluate(ctx.conn, truth_path, run_id, compare or [], split)
 
 

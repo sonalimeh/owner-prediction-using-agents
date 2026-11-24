@@ -4,7 +4,7 @@
 
 Everything is deterministic code except one step: reading free text whose wording the rule patterns do not know. Counting edits and incidents, dropping robots, leavers and readers, resolving a name to a user, the points (named 10, incident 3, edit 2), the decision (decline when nobody, when two texts disagree, when text and work disagree, or when the lead is 2 points or less), the confidence lookup and every write are code ([scorer.md](scorer/scorer.md), `owner_agent/proposing/rules.py`).
 
-The model is called only for an orphan whose description or note is neither a known wording nor routine: 11% of orphans on our fixture, 0% on the reference set. It never picks an owner. It returns facts (user id, role, source, quote); code drops any fact whose quote is not an exact substring of the source or does not name the user the way the rules accept a name. Surviving facts become the same mentions the patterns produce, and the rest is the baseline code (`owner_agent/proposing/text_facts.py`).
+The model is called only for an orphan whose description or note is neither a known wording nor routine: 11% of orphans on our fixture, 0% on the reference set. It never picks an owner. It returns facts (user id, role, source, quote); code drops any fact whose quote is not an exact substring of the source or does not name the user the way the rules accept a name; a fact about the note's own author needs no name, but an author called maintainer needs first-person wording in the quote (a condition added after a held_out review found a misread that could have reached the catalog, EVAL.md section 8). Surviving facts become the same mentions the patterns produce, and the rest is the baseline code (`owner_agent/proposing/text_facts.py`).
 
 Why: the brief wants a safe, checkable write path and honest measurement. Code gives a reason a reviewer can verify, the same answer every run (consistency 1.000 across three runs) and no cost for 89% of orphans. Free text is the one input fixed patterns cannot cover, and it is where the baseline makes every one of its mistakes ([EVAL.md](EVAL.md) section 3).
 
@@ -37,10 +37,9 @@ A person's `set_owner` also raises the version, so the owner and version guards 
 
 ## What I verified myself
 
-<!-- Drafted from the project's record. Edit this list so it says exactly what you did. -->
-
-- Read the 40 reference orphans and their labels before fixing the rules, to see what the examiners count as an owner.
-- Ran the full scenario on both fixtures and read the dump, the audit log and the apply report by hand, including the 8 skips on the reference set and the 24 on the fixture.
-- Ran the invariant checker on both fixtures, then on three deliberately broken copies of `apply` (audit entry not written; owner and version guards removed; skipped rows dropped) and saw it fail on each (checker.md).
-- Read every wrong proposal's reason on held_out and the two notes the model misread ("Paired with X on the backfill").
-- Confirmed from the tool registry and its tests that `propose` cannot read the truth file and that only `propose` can call a model.
+- Read the 40 reference orphans and their labels before fixing the rules, to see what the examiners count as an owner; the tables in scenarios.md 3.2 and 3.3 that compare our rule with their data come from that reading.
+- Decided the labelling rule by hand: near tie is none, text against more work is none, a first name alone names nobody. The dataset was then built to that rule, and the two added cases from my review (`readers_only`, `near_tie`) are in scenarios.md.
+- Ran the full scenario on the generated fixture from the shell, in both modes: `load`, `propose --baseline`, `propose`, `changes`, `apply`, then `evals --compare` of the model run against the baseline run. The `apply` returned nothing applied because nothing had been approved yet, and the comparison showed the two runs differ only on the text-dependent cases. That session is the worked example in the README.
+- Read the eval output on calibration for the model run, group by group, and chose 0.95 from the threshold table and the thin group's 7 of 7.
+- Reviewed the invariant checker's design before it was written, read its output on both fixtures, and read the result of the three mutation runs in checker.md.
+- Reviewed and rejected the three coding-agent proposals in the table above, and chose what replaced them.

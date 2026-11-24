@@ -59,7 +59,7 @@ class EvalTest(unittest.TestCase):
         conn.close()
 
     def evaluate(self, *extra):
-        code, out, err = run("eval", self.truth, "--db", self.db, "--run", "r_1", "--json", *extra)
+        code, out, err = run("evals", self.truth, "--db", self.db, "--run", "r_1", "--json", *extra)
         self.assertEqual(code, 0, err)
         return json.loads(out)
 
@@ -104,7 +104,7 @@ class EvalTest(unittest.TestCase):
         self.assertEqual(self.evaluate()["groups"], before["groups"])
 
     def test_text_report(self):
-        code, out, _ = run("eval", self.truth, "--db", self.db, "--run", "r_1")
+        code, out, _ = run("evals", self.truth, "--db", self.db, "--run", "r_1")
         self.assertEqual(code, 0)
         self.assertIn("Thresholds", out)
         self.assertIn("Missing proposals, a bug (1): a_0030", out)
@@ -120,7 +120,7 @@ class EvalTest(unittest.TestCase):
 
     def test_confidence_groups_and_calibrate(self):
         table = os.path.join(self.dir.name, "confidence.json")
-        code, _, err = run("eval", self.truth, "--db", self.db, "--run", "r_1", "--calibrate", table)
+        code, _, err = run("evals", self.truth, "--db", self.db, "--run", "r_1", "--calibrate", table)
         self.assertEqual(code, 1)
         self.assertIn("needs --split calibration", err)
 
@@ -140,7 +140,7 @@ class EvalTest(unittest.TestCase):
         self.assertEqual(groups["decline_nobody"]["confidence"], 0.5)
 
     def test_rejects_non_truth_file(self):
-        code, _, err = run("eval", SEED, "--db", self.db, "--run", "r_1")
+        code, _, err = run("evals", SEED, "--db", self.db, "--run", "r_1")
         self.assertEqual(code, 1)
         self.assertIn("not a truth record", err)
 

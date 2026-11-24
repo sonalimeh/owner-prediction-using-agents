@@ -138,6 +138,26 @@ class ExtractorTest(unittest.TestCase):
         self.assertEqual(decision.owner, "u_ana")
         self.assertIn("s_9", decision.signal_ids)
 
+    def test_author_called_maintainer_needs_first_person_wording(self):
+        # The note's author is a reader; the model wrongly calls them the maintainer. The quote names
+        # someone else and says nothing in the first person, so the fact is dropped and the real
+        # editor, with only 5 points, is still proposed.
+        note = Signal("s_9", "u_ana", "query", "Paired with Rohan on the backfill.")
+        signals = edits("u_sam", 1) + [Signal("s_i", "u_sam", "incident_response", ""), note]
+        client = FakeClient({"facts": [fact("u_ana", "maintainer", "s_9", "Paired with Rohan on the backfill.")]})
+        extraction, decision = run(client, "", signals)
+        self.assertEqual(extraction.mentions, [])
+        self.assertIn("Dropped 1 unsupported model fact(s)", extraction.notes)
+        self.assertEqual((decision.owner, decision.group), ("u_sam", "proposal_model_text"))
+
+    def test_author_in_other_roles_needs_no_first_person_wording(self):
+        # A former_maintainer fact about the author stands on the author rule alone.
+        note = Signal("s_9", "u_ana", "edit", "Sam Lee is picking this up; handing over from next sprint.")
+        client = FakeClient({"facts": [fact("u_ana", "former_maintainer", "s_9", "handing over from next sprint")]})
+        extraction, decision = run(client, "", edits("u_ana", 5) + [note])
+        self.assertEqual([m.kind for m in extraction.mentions], ["disowns"])
+        self.assertIsNone(decision.owner)
+
     def test_names_must_meet_the_rules_name_policy(self):
         description = "Ana looks after this; Ana (growth-analytics) reviews changes."
         client = FakeClient({"facts": [
@@ -216,7 +236,7 @@ class ModelProposeTest(unittest.TestCase):
             self.assertEqual(p["confidence"], CONFIDENCE[p["confidence_group"]])
         run = self.conn.execute("SELECT * FROM runs WHERE run_id = ?", (run_id,)).fetchone()
         self.assertEqual((run["mode"], run["model"], run["prompt_version"]),
-                         ("model", "fake-model", "scorer-v1+text-facts-v2"))
+                         ("model", "fake-model", "scorer-v1+text-facts-v3"))
 
     def test_model_errors_keep_the_baseline_answer(self):
         baseline_run, _ = propose.propose(self.conn, use_baseline=True)

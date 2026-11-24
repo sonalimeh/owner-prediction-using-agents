@@ -4,7 +4,9 @@ rules.read_text() knows a fixed set of wordings. Any other text that is not rout
 which reports what it says about people, with a quote. Code checks every fact and drops it unless:
 the user is in the roster, the source is one it was shown, the quote is an exact substring of that
 source, and the quote names the user the way the rules accept a name (a full name, or a first name with
-the team), unless the note's writer is talking about themselves. The surviving facts become the same
+the team). A fact about the note's own writer needs no name, but a writer called maintainer needs
+first-person wording in the quote ("I", "me", "my"): a note that only mentions someone else, such as
+"Paired with Rohan on the backfill", is not a claim by its author. The surviving facts become the same
 Mentions the patterns produce. The model never picks an owner and never sets the points.
 """
 
@@ -15,7 +17,8 @@ from dataclasses import dataclass, field
 from owner_agent.proposing.llms import LLMError
 from owner_agent.proposing.rules import Mention
 
-PROMPT_VERSION = "text-facts-v2"
+PROMPT_VERSION = "text-facts-v3"  # v3: an author's maintainer claim needs first-person wording in the quote
+_FIRST_PERSON = re.compile(r"(?<!\w)(I|I've|I'm|me|my|mine)(?!\w)", re.IGNORECASE)
 
 ROLES = {
     "maintainer": "currently maintains, builds, runs or is accountable for this asset",
@@ -141,7 +144,10 @@ class Extractor:
                 and isinstance(quote, str)
                 and quote.strip()
                 and _normalise(quote) in _normalise(src["text"])
-                and (uid == writer or self.roster.identifies(uid, quote))
+                and (
+                    self.roster.identifies(uid, quote)
+                    or (uid == writer and (role != "maintainer" or _FIRST_PERSON.search(quote)))
+                )
             )
             if ok:
                 kept.append((uid, role, source, writer))
